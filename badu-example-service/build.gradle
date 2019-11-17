@@ -1,0 +1,16 @@
+plugins {
+    id 'java'        
+    id 'application' 
+}
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+dependencies {
+    compile project(':badu-server-core') 
+}
+
+application {
+    mainClassName = 'com.badu.ExampleService'
+    applicationDefaultJvmArgs = ['-Dgreeting.language=en']
+}
