@@ -1,6 +1,8 @@
-package com.badu.server.core.netty;
+package com.badu.server.core.netty.codecs.websockets;
 
+import com.badu.common.utils.AddressUtils;
 import com.badu.server.core.ApiRequest;
+import com.badu.server.core.api.WebSocketRequest;
 import com.badu.server.core.logging.MDCLogging;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.netty.buffer.ByteBuf;
@@ -14,6 +16,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.MDC;
 
+import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.MultivaluedHashMap;
 import javax.ws.rs.core.MultivaluedMap;
 import java.util.List;
@@ -45,12 +48,12 @@ public class WebSocketsApiRequestDecoder extends MessageToMessageDecoder<TextWeb
 
         MultivaluedMap<String, String> headers = new MultivaluedHashMap<>();
         out.add(new ApiRequest(requestID, wsRequest.getPath(),
-                HttpMethod.valueOf(wsRequest.getMethod()), content, PageAttributes.MediaType.APPLICATION_JSON,
+                HttpMethod.valueOf(wsRequest.getMethod()), content, MediaType.APPLICATION_JSON,
                 headers,
                 new MultivaluedHashMap<String, String>(),
                 new MultivaluedHashMap<String, String>(),
                 new MultivaluedHashMap<String, String>(),
-                ClientAddressUtil.extractClientAddress(ctx.channel().remoteAddress())));
+                AddressUtils.extractClientAddress(ctx.channel().remoteAddress())));
     }
 
     @Override

@@ -1,5 +1,7 @@
 package com.badu.server.core;
 
+import com.badu.server.core.factories.ObjectMapperFactory;
+import com.badu.server.core.netty.RequestHandlerSwitcher;
 import com.badu.server.core.netty.ServerInitializer;
 import com.badu.server.core.netty.handlers.RequestHandler;
 import io.netty.bootstrap.ServerBootstrap;
@@ -11,7 +13,7 @@ import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.handler.logging.LogLevel;
 import io.netty.handler.logging.LoggingHandler;
 
-public class BaduService {
+public class BaduService implements ObjectMapperFactory {
 
     public static final int DEFAULT_SERVER_PORT = 8000;
     public static final int DEFAULT_MAX_CONTENT_LENGTH = 512 * 1024 * 1024; // 512Mb
@@ -66,9 +68,8 @@ public class BaduService {
             b.group(bossGroup, workerGroup)
                     .channel(NioServerSocketChannel.class)
                     .handler(new LoggingHandler(LogLevel.INFO))
-                    .childHandler(new ServerInitializer(maxContentLength));
-
-            // new RequestHandlerSwitcher(requestHandlers)
+                    .childHandler(new ServerInitializer(maxContentLength,
+                            new RequestHandlerSwitcher(createObjectMapper(), requestHandlers)));
 
             Channel ch = (null != hostname ? b.bind(hostname, port) : b.bind(port)).sync().channel();
             System.err.println("Open your web browser and navigate to http" + (null != hostname ? "://" + hostname + ":" : "://127.0.0.1:") + port + '/');

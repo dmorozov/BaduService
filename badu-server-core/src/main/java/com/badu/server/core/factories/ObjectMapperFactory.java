@@ -6,7 +6,7 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 
 public interface ObjectMapperFactory {
 
-    default ObjectMapper create() {
+    default ObjectMapper createObjectMapper() {
         ObjectMapper mapper = new ObjectMapper();
         mapper.configure(JsonParser.Feature.ALLOW_UNQUOTED_FIELD_NAMES, true);
         mapper.configure(JsonParser.Feature.ALLOW_SINGLE_QUOTES, true);

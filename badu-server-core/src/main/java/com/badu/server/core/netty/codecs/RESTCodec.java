@@ -1,5 +1,6 @@
-package com.badu.server.core.netty;
+package com.badu.server.core.netty.codecs;
 
+import com.badu.common.utils.AddressUtils;
 import com.badu.server.core.ApiRequest;
 import com.badu.server.core.ApiResponse;
 import com.badu.server.core.logging.MDCLogging;
@@ -10,6 +11,7 @@ import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.MessageToMessageCodec;
 import io.netty.handler.codec.http.*;
+import io.netty.handler.codec.http.cookie.Cookie;
 import io.netty.handler.codec.http.cookie.ServerCookieDecoder;
 import io.netty.handler.codec.http.multipart.Attribute;
 import io.netty.handler.codec.http.multipart.HttpPostRequestDecoder;
@@ -115,7 +117,7 @@ public class RESTCodec extends MessageToMessageCodec<FullHttpRequest, ApiRespons
                 request.uri(), request.method(),
                 ReferenceCountUtil.retain(request.content()), contentType,
                 headers, formParameters, queryParameters, cookies,
-                ClientAddressUtil.extractClientAddress(ctx.channel().remoteAddress()));
+                AddressUtils.extractClientAddress(ctx.channel().remoteAddress()));
         out.add(apiRequest);
     }
 
